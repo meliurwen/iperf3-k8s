@@ -37,9 +37,17 @@ echo
 
 CLIENTS=$(kubectl get pods -l app=iperf3-client -o name | cut -d'/' -f2)
 
+arguments="$*"
+
+timestamp="$(date +"%Y-%m-%d_%H-%M-%S")"
+
 for POD in ${CLIENTS}; do
     HOST=$(kubectl get pod "${POD}" -o jsonpath='{.status.hostIP}')
-    kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "Client on ${HOST}" "$@"
+    if [[ "${arguments}" == *"-J"* ]]; then
+        kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "${HOST}" "$@" > "reports/${timestamp}-${HOST}-${POD}.json"
+    else
+        kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "${HOST}" "$@"
+    fi
     echo
 done
 
