@@ -44,7 +44,7 @@ timestamp="$(date +"%Y-%m-%d_%H-%M-%S")"
 for POD in ${CLIENTS}; do
     HOST=$(kubectl get pod "${POD}" -o jsonpath='{.status.hostIP}')
     if [[ "${arguments}" == *"-J"* ]]; then
-        kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "${HOST}" "$@" "--logfile" "reports/${timestamp}-${HOST}-${POD}.json"
+        kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "${HOST}" "$@" > "reports/${timestamp}-${HOST}-${POD}.json"
         echo "Report created: reports/${timestamp}-${HOST}-${POD}.json"
     else
         kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "${HOST}" "$@"
