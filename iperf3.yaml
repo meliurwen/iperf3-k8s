@@ -34,7 +34,11 @@ spec:
         args: ['-s']
         ports:
         - containerPort: 5201
-          name: server
+          protocol: TCP
+          name: server-tcp
+        - containerPort: 5201
+          protocol: UDP
+          name: server-udp
       terminationGracePeriodSeconds: 0
 
 ---
@@ -49,10 +53,10 @@ spec:
   ports:
   - protocol: TCP
     port: 5201
-    targetPort: server
+    targetPort: server-tcp
   - protocol: UDP
     port: 5201
-    targetPort: server
+    targetPort: server-udp
     
 ---
     
