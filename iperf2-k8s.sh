@@ -16,7 +16,7 @@ done
 echo "Server is running"
 echo
 
-CLIENTS=$(kubectl get pods -l app=iperf-client -o name | cut -d'/' -f2)
+CLIENTS=$(kubectl get pods -l app=iperf2-client -o name | cut -d'/' -f2)
 
 for POD in ${CLIENTS}; do
     until $(kubectl get pod "${POD}" -o jsonpath='{.status.containerStatuses[0].ready}'); do
@@ -35,7 +35,7 @@ echo
 ## </setup>
 ## <run>
 
-CLIENTS=$(kubectl get pods -l app=iperf-client -o name | cut -d'/' -f2)
+CLIENTS=$(kubectl get pods -l app=iperf2-client -o name | cut -d'/' -f2)
 
 for POD in ${CLIENTS}; do
     HOST=$(kubectl get pod "${POD}" -o jsonpath='{.status.hostIP}')
