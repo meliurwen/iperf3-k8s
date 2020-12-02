@@ -5,7 +5,7 @@ metadata:
   labels:
     app: iperf2-server
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
       app: iperf2-server
