@@ -41,13 +41,15 @@ echo "Now all clients flood the server at the same time..."
 
 for POD in ${CLIENTS}; do
     echo "[Run] iperf2-client pod ${POD}"
-    kubectl exec -it "${POD}" -- iperf -c iperf2-server "$@" &> /dev/null &
+    #kubectl exec -it "${POD}" -- iperf -c iperf2-server "$@" &> /dev/null &
+    kubectl exec -it "${POD}" -- iperf -c iperf2-server "$@"
 done
 
-until [[ $(jobs | grep -v Running) != "" ]]; do
-    printf "."
-    sleep 2
-done
+#until [[ $(jobs | grep -v Running) != "" ]]; do
+#    printf "."
+#    sleep 2
+#done
+
 printf " done\n"
 
 ## </run>
