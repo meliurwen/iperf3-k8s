@@ -50,6 +50,9 @@ spec:
   - protocol: TCP
     port: 5201
     targetPort: server
+  - protocol: UDP
+    port: 5201
+    targetPort: server
     
 ---
     
