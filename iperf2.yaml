@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: iperf3-server-deployment
+  name: iperf2-server-deployment
   labels:
-    app: iperf3-server
+    app: iperf2-server
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
-      app: iperf3-server
+      app: iperf2-server
   template:
     metadata:
       labels:
-        app: iperf3-server
+        app: iperf2-server
     spec:
       affinity:
         nodeAffinity:
@@ -29,14 +29,14 @@ spec:
           operator: Exists
           effect: NoSchedule
       containers:
-      - name: iperf3-server
-        image: networkstatic/iperf3
+      - name: iperf2-server
+        image: mlabbe/iperf
         args: ['-s']
         ports:
-        - containerPort: 5201
+        - containerPort: 5001
           protocol: TCP
           name: server-tcp
-        - containerPort: 5201
+        - containerPort: 5001
           protocol: UDP
           name: server-udp
       terminationGracePeriodSeconds: 0
@@ -46,17 +46,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: iperf3-server
+  name: iperf2-server
 spec:
   selector:
-    app: iperf3-server
+    app: iperf2-server
   ports:
   - protocol: TCP
-    port: 5201
+    port: 5001
     name: crappy-tcp
     targetPort: server-tcp
   - protocol: UDP
-    port: 5201
+    port: 5001
     name: crappy-udp
     targetPort: server-udp
     
@@ -65,25 +65,25 @@ spec:
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: iperf3-clients
+  name: iperf2-clients
   labels:
-    app: iperf3-client
+    app: iperf2-client
 spec:
   selector:
     matchLabels:
-      app: iperf3-client
+      app: iperf2-client
   template:
     metadata:
       labels:
-        app: iperf3-client
+        app: iperf2-client
     spec:
       tolerations:
         - key: node-role.kubernetes.io/master
           operator: Exists
           effect: NoSchedule
       containers:
-      - name: iperf3-client
-        image: networkstatic/iperf3
+      - name: iperf2-client
+        image: mlabbe/iperf
         command: ['/bin/sh', '-c', 'sleep infinity']
-        # To benchmark manually: kubectl exec iperf3-clients-jlfxq -- /bin/sh -c 'iperf3 -c iperf3-server'
+        # To benchmark manually: kubectl exec iperf2-clients-jlfxq -- /bin/sh -c 'iperf -c iperf2-server'
       terminationGracePeriodSeconds: 0
