@@ -45,10 +45,10 @@ for POD in ${CLIENTS}; do
     kubectl exec -it "${POD}" -- iperf -c iperf2-server "$@" &
 done
 
-#until [[ $(jobs | grep -v Running) != "" ]]; do
-#    printf "."
-#    sleep 2
-#done
+until [[ $(jobs | grep -v Running) != "" ]]; do
+    printf "."
+    sleep 2
+done
 
 printf " done\n"
 
