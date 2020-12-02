@@ -53,9 +53,11 @@ spec:
   ports:
   - protocol: TCP
     port: 5201
+    name: crappy-tcp
     targetPort: server-tcp
   - protocol: UDP
     port: 5201
+    name: crappy-udp
     targetPort: server-udp
     
 ---
