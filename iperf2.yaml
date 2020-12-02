@@ -69,7 +69,6 @@ metadata:
   labels:
     app: iperf2-client
 spec:
-  replicas: 9
   selector:
     matchLabels:
       app: iperf2-client
