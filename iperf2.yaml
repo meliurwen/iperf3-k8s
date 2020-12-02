@@ -63,12 +63,13 @@ spec:
 ---
     
 apiVersion: apps/v1
-kind: DaemonSet
+kind: ReplicaSet
 metadata:
   name: iperf2-clients
   labels:
     app: iperf2-client
 spec:
+  replicas: 18
   selector:
     matchLabels:
       app: iperf2-client
