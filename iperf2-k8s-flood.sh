@@ -6,17 +6,17 @@ cd $(dirname $0)
 
 ## <setup>
 
-kubectl create -f iperf3.yaml
+kubectl create -f iperf2.yaml
 
-until $(kubectl get pods -l app=iperf3-server -o jsonpath='{.items[0].status.containerStatuses[0].ready}'); do
-    echo "Waiting for iperf3 server to start..."
+until $(kubectl get pods -l app=iperf2-server -o jsonpath='{.items[0].status.containerStatuses[0].ready}'); do
+    echo "Waiting for iperf2 server to start..."
     sleep 5
 done
 
 echo "Server is running"
 echo
 
-CLIENTS=$(kubectl get pods -l app=iperf3-client -o name | cut -d'/' -f2)
+CLIENTS=$(kubectl get pods -l app=iperf2-client -o name | cut -d'/' -f2)
 
 for POD in ${CLIENTS}; do
     until $(kubectl get pod "${POD}" -o jsonpath='{.status.containerStatuses[0].ready}'); do
@@ -35,19 +35,13 @@ echo
 ## </setup>
 ## <run>
 
-CLIENTS=$(kubectl get pods -l app=iperf3-client -o name | cut -d'/' -f2)
-
-for POD in ${CLIENTS}; do
-    HOST=$(kubectl get pod "${POD}" -o jsonpath='{.status.hostIP}')
-    kubectl exec -it "${POD}" -- iperf3 -c iperf3-server -T "Client on ${HOST}" "$@"
-    echo
-done
+CLIENTS=$(kubectl get pods -l app=iperf2-client -o name | cut -d'/' -f2)
 
 echo "Now all clients flood the server at the same time..."
 
 for POD in ${CLIENTS}; do
-    echo "[Run] iperf-client pod ${POD}"
-    kubectl exec -it "${POD}" -- iperf3 -c iperf3-server "$@" &> /dev/null &
+    echo "[Run] iperf2-client pod ${POD}"
+    kubectl exec -it "${POD}" -- iperf -c iperf2-server "$@" &> /dev/null &
 done
 
 until [[ $(jobs | grep -v Running) != "" ]]; do
@@ -59,6 +53,6 @@ printf " done\n"
 ## </run>
 ## <clean>
 
-kubectl delete --cascade -f iperf3.yaml
+kubectl delete --cascade -f iperf2.yaml
 
 ## </clean>

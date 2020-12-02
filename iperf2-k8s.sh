@@ -39,7 +39,7 @@ CLIENTS=$(kubectl get pods -l app=iperf2-client -o name | cut -d'/' -f2)
 
 for POD in ${CLIENTS}; do
     HOST=$(kubectl get pod "${POD}" -o jsonpath='{.status.hostIP}')
-    kubectl exec -it "${POD}" -- iperf -c iperf2-server -T "Client on ${HOST}" "$@"
+    kubectl exec -it "${POD}" -- iperf -c iperf2-server "$@"
     echo
 done
 
