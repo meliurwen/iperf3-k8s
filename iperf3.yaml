@@ -48,6 +48,7 @@ kind: Service
 metadata:
   name: iperf3-server
 spec:
+  type: NodePort
   selector:
     app: iperf3-server
   ports:
@@ -59,7 +60,7 @@ spec:
     port: 5201
     name: crappy-udp
     targetPort: server-udp
-    
+
 ---
     
 apiVersion: apps/v1
